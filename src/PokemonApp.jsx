@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getPokemons } from './store/slices/pokemon'
 
 export const PokemonApp = () => {
+  const { pokemons, isLoading, page } = useSelector((state) => state.pokemons)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -13,12 +14,16 @@ export const PokemonApp = () => {
     <>
       <h1>PokemonApp</h1>
       <hr />
+      <span>Loading: {isLoading ? 'True' : 'False'}</span>
 
       <ul>
-        <li>Hola</li>
-        <li>Hola</li>
-        <li>Hola</li>
+        {pokemons.map(({ name }) => (
+          <li key={name}>{name}</li>
+        ))}
       </ul>
+      <button disabled={isLoading} onClick={() => dispatch(getPokemons(page))}>
+        Next
+      </button>
     </>
   )
 }
